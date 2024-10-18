@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
+import 'login.dart'; 
+import 'Sign_up.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Flutter Demo'),
-          ),
-          body: const Center(
-            child: Text('Hello World'),
-          ),
-        ));
+      title: 'My Hackathon App',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
+      ),
+      home: SignUpScreen(), 
+      debugShowCheckedModeBanner: false, 
+    );
   }
 }
