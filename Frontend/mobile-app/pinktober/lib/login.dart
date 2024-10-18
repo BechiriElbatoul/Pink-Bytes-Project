@@ -8,29 +8,32 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(
+            horizontal: 32.0, vertical: 16.0), // Increased horizontal padding
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center, // Center the main text
           children: [
             const SizedBox(height: 80),
-            const Padding(
-              padding: EdgeInsets.only(left: 24.0),
-              child: Text(
-                'Good to see you back!',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Quicksand',
-                ),
+            const Text(
+              'Good to see you back!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Quicksand',
               ),
             ),
             const SizedBox(height: 40),
+
+            // Left aligned Email Label and TextField
             _buildLabel('Email'),
             _buildTextField('Email'),
             const SizedBox(height: 24),
+
+            // Left aligned Password Label and TextField
             _buildLabel('Password'),
             _buildTextField('Password', isPassword: true),
             const SizedBox(height: 16),
+
             Center(
               child: TextButton(
                 onPressed: () {},
@@ -47,6 +50,8 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Centered Login Button
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -71,6 +76,8 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Centered navigation to create a new account
             Center(
               child: TextButton(
                 onPressed: () {
@@ -97,12 +104,16 @@ class LoginScreen extends StatelessWidget {
   Widget _buildLabel(String label) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6.0),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.black87,
-          fontFamily: 'Quicksand',
+      child: Align(
+        // Aligning the label to the left
+        alignment: Alignment.centerLeft,
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14, // Updated to 14px
+            color: Colors.black87,
+            fontFamily: 'Quicksand',
+          ),
         ),
       ),
     );
@@ -126,9 +137,13 @@ class LoginScreen extends StatelessWidget {
         ),
         fillColor: Colors.white,
         filled: true,
+        contentPadding: const EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 10), // Adjust padding to make the rectangles smaller
       ),
       style: const TextStyle(
         fontFamily: 'Quicksand',
+        fontSize: 14, // Updated to 14px
       ),
     );
   }

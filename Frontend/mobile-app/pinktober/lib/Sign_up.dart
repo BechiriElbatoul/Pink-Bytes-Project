@@ -10,7 +10,9 @@ class SignUpScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(
+              horizontal: 32.0,
+              vertical: 16.0), // Horizontal padding for spacing
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -18,7 +20,7 @@ class SignUpScreen extends StatelessWidget {
               Center(
                 child: Image.asset(
                   'assets/images/sign_img.png',
-                  height: 150,
+                  height: 250, // Increased image height
                   fit: BoxFit.cover,
                 ),
               ),
@@ -97,7 +99,7 @@ class SignUpScreen extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          fontSize: 16,
+          fontSize: 14, // Font size
           color: Colors.black87,
           fontFamily: 'Quicksand',
           fontWeight: FontWeight.bold,
@@ -108,7 +110,7 @@ class SignUpScreen extends StatelessWidget {
 
   Widget _buildTextField(String label, {bool isPassword = false}) {
     return Container(
-      height: 50,
+      height: 40, // Decreased height for the text fields
       child: TextField(
         obscureText: isPassword,
         decoration: InputDecoration(
