@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'information_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -66,7 +67,13 @@ class SignUpScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 12),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => InformationScreen()),
+                    );
+                  },
                   child: const Text(
                     'SIGN UP',
                     style: TextStyle(
