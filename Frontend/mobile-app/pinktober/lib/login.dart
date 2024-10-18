@@ -7,7 +7,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
+      body: SingleChildScrollView(
+        // Add SingleChildScrollView here
         padding: const EdgeInsets.symmetric(
             horizontal: 32.0, vertical: 16.0), // Increased horizontal padding
         child: Column(

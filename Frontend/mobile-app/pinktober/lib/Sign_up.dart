@@ -10,9 +10,7 @@ class SignUpScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 32.0,
-              vertical: 16.0), // Horizontal padding for spacing
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -109,9 +107,7 @@ class SignUpScreen extends StatelessWidget {
   }
 
   Widget _buildTextField(String label, {bool isPassword = false}) {
-    return Container(
-      height: 40, // Decreased height for the text fields
-      child: TextField(
+    return TextField(
         obscureText: isPassword,
         decoration: InputDecoration(
           border: OutlineInputBorder(
@@ -128,12 +124,12 @@ class SignUpScreen extends StatelessWidget {
           ),
           fillColor: Colors.white,
           filled: true,
-        ),
-        style: const TextStyle(
-          fontFamily: 'Quicksand',
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+          hintStyle: const TextStyle(
+            fontFamily: 'Quicksand',
+            fontSize: 14,
+          ),
+        ));
   }
 }
