@@ -34,3 +34,5 @@ flutter:
         - asset: fonts/Urbanist-Regular.ttf
         - asset: fonts/Urbanist-Bold.ttf
 
+  assets:
+    - assets/images/

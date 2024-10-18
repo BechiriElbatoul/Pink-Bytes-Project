@@ -73,7 +73,9 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 20),
             Center(
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup');
+                },
                 child: const Text(
                   'Or create a new account',
                   style: TextStyle(
@@ -94,14 +96,13 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildLabel(String label) {
     return Padding(
-      padding: const EdgeInsets.only(
-          bottom: 6.0), // Slight spacing between label and input field
+      padding: const EdgeInsets.only(bottom: 6.0),
       child: Text(
         label,
         style: const TextStyle(
           fontSize: 16,
           color: Colors.black87,
-          fontFamily: 'Quicksand', // Use Quicksand font for labels
+          fontFamily: 'Quicksand',
         ),
       ),
     );
@@ -124,10 +125,10 @@ class LoginScreen extends StatelessWidget {
           borderSide: const BorderSide(color: Colors.pink, width: 2),
         ),
         fillColor: Colors.white,
-        filled: true, // White background for the input fields
+        filled: true,
       ),
       style: const TextStyle(
-        fontFamily: 'Quicksand', // Use Quicksand font for text input
+        fontFamily: 'Quicksand',
       ),
     );
   }
