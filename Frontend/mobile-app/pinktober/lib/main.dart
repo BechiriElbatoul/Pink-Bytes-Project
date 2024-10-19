@@ -6,6 +6,7 @@ import 'Med_tracker.dart';
 import 'Add_member.dart';
 import 'Family_history.dart';
 import 'scanner.dart';
+import 'scan.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,9 +20,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      initialRoute: '/scanner',
+      initialRoute: '/scan',
       debugShowCheckedModeBanner: false,
       routes: {
+        '/scan': (context) => ScanIngredientsPage(),
         '/scanner': (context) => ScanCosmeticsPage(),
         '/FamilyHistory': (context) => FamilyHistoryPage(),
         '/AddMember': (context) => AddFamilyMemberPage(),
