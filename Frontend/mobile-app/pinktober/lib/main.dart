@@ -9,6 +9,7 @@ import 'scan.dart';
 import 'homescreen.dart';
 import 'settings.dart';
 import 'calendar.dart';
+import 'notif.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,9 +23,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      initialRoute: '/calendar',
+      initialRoute: '/notif',
       debugShowCheckedModeBanner: false,
       routes: {
+        '/notif': (context) => NotificationPage(),
         '/calendar': (context) => CalendarPage(),
         '/settings': (context) => SettingsPage(),
         '/screen': (context) => HomeScreenPage(),
