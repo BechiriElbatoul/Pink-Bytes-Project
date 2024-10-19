@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
-class MedTrackerPage extends StatelessWidget {
+class MedTrackerPage extends StatefulWidget {
   const MedTrackerPage({super.key});
+
+  @override
+  _MedTrackerPageState createState() => _MedTrackerPageState();
+}
+
+class _MedTrackerPageState extends State<MedTrackerPage> {
+  // Keep track of the checkbox states
+  List<bool> _medicationChecked = [false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,6 @@ class MedTrackerPage extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: _buildFixedImage(),
           ),
-          // Content overlay
           SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -44,44 +51,46 @@ class MedTrackerPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 8),
-                  const Text(
-                    'Don’t forget your med!',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Quicksand',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FloatingActionButton(
-                        onPressed: () {},
-                        backgroundColor: Colors.pink,
-                        child: const Icon(Icons.add),
-                      ),
-                      const SizedBox(width: 10),
                       const Text(
-                        'Add Medication',
+                        'Don’t forget your med!',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Quicksand',
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      RawMaterialButton(
+                        onPressed: () {
+                          // Add your logic for the '+' button here
+                        },
+                        fillColor: const Color(0xFFEBA1AE),
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(10.0),
+                        constraints: const BoxConstraints.tightFor(
+                          width: 36.0,
+                          height: 36.0,
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          size: 16.0,
+                          color: Colors.black,
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  // Smaller medication cards centered
                   _buildMedicationCard(
-                      'Medication 1', 'assets/images/meds.png'),
+                      'Medication 1', 'assets/images/meds.png', 0),
                   _buildMedicationCard(
-                      'Medication 2', 'assets/images/meds.png'),
+                      'Medication 2', 'assets/images/meds.png', 1),
                   _buildMedicationCard(
-                      'Medication 3', 'assets/images/meds.png'),
+                      'Medication 3', 'assets/images/meds.png', 2),
                   _buildMedicationCard(
-                      'Medication 4', 'assets/images/meds.png'),
+                      'Medication 4', 'assets/images/meds.png', 3),
                   const SizedBox(height: 100),
                 ],
               ),
@@ -90,6 +99,56 @@ class MedTrackerPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildMedicationCard(
+      String medicationName, String iconPath, int index) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      height: 60,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFFFCDD9), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            offset: const Offset(0, 2),
+            blurRadius: 4,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Image.asset(iconPath, width: 40, height: 40),
+              const SizedBox(width: 16),
+              Text(
+                medicationName,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+            ],
+          ),
+          Checkbox(
+            value: _medicationChecked[index],
+            onChanged: (bool? value) {
+              setState(() {
+                _medicationChecked[index] = value ?? false;
+              });
+            },
+            activeColor: const Color(0xFFEBA1AE),
+          ),
+        ],
+      ),
     );
   }
 
@@ -129,60 +188,12 @@ class MedTrackerPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMedicationCard(String medicationName, String iconPath) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      height: 50, // Smaller height
-      width: 300, // Set a fixed width for the card
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.pink, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            offset: const Offset(0, 2),
-            blurRadius: 4,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Image.asset(iconPath, width: 40, height: 40),
-              const SizedBox(width: 16),
-              Text(
-                medicationName,
-                style: const TextStyle(
-                  fontSize: 16, // Smaller font size
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-            ],
-          ),
-          Checkbox(
-            value: false,
-            onChanged: (bool? value) {},
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildFixedImage() {
     return Container(
-      width: double.infinity,
-      height: 150, // Adjust height to make it smaller
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        image: const DecorationImage(
+      width: 220,
+      height: 220,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
           image: AssetImage('assets/images/woman.png'),
           fit: BoxFit.cover,
         ),
@@ -217,7 +228,7 @@ class MedTrackerPage extends StatelessWidget {
       currentIndex: 0,
       onTap: (index) {},
       backgroundColor: Colors.white,
-      selectedItemColor: const Color(0xFFFFCDD9),
+      selectedItemColor: const Color.fromARGB(255, 251, 251, 251),
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 0,
