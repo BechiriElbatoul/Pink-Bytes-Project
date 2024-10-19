@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Sign_up.dart';
-import 'Home_page.dart';
-import 'Med_tracker.dart';
-import 'Add_member.dart';
-import 'Family_history.dart';
-import 'scanner.dart';
-import 'scan.dart';
-import 'homescreen.dart';
-import 'settings.dart';
-import 'calendar.dart';
-import 'notif.dart';
+import 'check.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,20 +13,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      initialRoute: '/notif',
+      initialRoute: '/check', // Ensure this matches the route defined below
       debugShowCheckedModeBanner: false,
       routes: {
-        '/notif': (context) => NotificationPage(),
-        '/calendar': (context) => CalendarPage(),
-        '/settings': (context) => SettingsPage(),
-        '/screen': (context) => HomeScreenPage(),
-        '/scan': (context) => ScanIngredientsPage(),
-        '/scanner': (context) => ScanCosmeticsPage(),
-        '/FamilyHistory': (context) => FamilyHistoryPage(),
-        '/AddMember': (context) => AddFamilyMemberPage(),
-        '/MedTracker': (context) => MedTrackerPage(),
-        '/homepage': (context) => HomePage(),
-        '/signup': (context) => SignUpScreen(),
+        '/check': (context) => CheckPage(), // Keep this as is
       },
     );
   }
