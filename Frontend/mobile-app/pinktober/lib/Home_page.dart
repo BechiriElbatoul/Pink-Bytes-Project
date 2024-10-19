@@ -17,11 +17,19 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ],
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Color.fromARGB(255, 58, 56, 56)),
-          onPressed: () {},
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu,
+                  color: Color.fromARGB(255, 58, 56, 56)),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
       ),
+      drawer: _buildSideBar(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -79,6 +87,54 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Drawer _buildSideBar(BuildContext context) {
+    return Drawer(
+      child: Container(
+        width: 100,
+        child: Column(
+          children: [
+            AppBar(
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'We are proud of you, track your journey now!',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Quicksand',
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            _buildSidebarButton(
+                'symptoms', 'assets/images/Hypertension.png', context),
+            _buildSidebarButton(
+                'self check', 'assets/images/Black Woman Bra.png', context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSidebarButton(
+      String text, String iconPath, BuildContext context) {
+    return ListTile(
+      leading: Image.asset(iconPath, width: 24, height: 24),
+      title: Text(text),
+      onTap: () {
+        // Handle button tap
+        Navigator.of(context).pop();
+      },
     );
   }
 
@@ -253,16 +309,9 @@ class HomePage extends StatelessWidget {
                               ),
                               textAlign: TextAlign.center,
                             )
-                          : Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                              ),
-                              child: Image.asset(
-                                'assets/images/${index + 1}.png',
-                                fit: BoxFit.cover,
-                              ),
+                          : Image.asset(
+                              'assets/images/${index + 1}.png',
+                              fit: BoxFit.cover,
                             ),
                     ),
                   ),
@@ -324,7 +373,7 @@ class HomePage extends StatelessWidget {
           const Expanded(
             child: Text(
               '“Family is the heart of our journey, giving us strength when we need it most.”', // Replace with your actual text
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Urbanist',
