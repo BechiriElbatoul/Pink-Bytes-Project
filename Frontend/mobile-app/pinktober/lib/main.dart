@@ -8,6 +8,7 @@ import 'scanner.dart';
 import 'scan.dart';
 import 'homescreen.dart';
 import 'settings.dart';
+import 'calendar.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,9 +22,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      initialRoute: '/settings',
+      initialRoute: '/calendar',
       debugShowCheckedModeBanner: false,
       routes: {
+        '/calendar': (context) => CalendarPage(),
         '/settings': (context) => SettingsPage(),
         '/screen': (context) => HomeScreenPage(),
         '/scan': (context) => ScanIngredientsPage(),
