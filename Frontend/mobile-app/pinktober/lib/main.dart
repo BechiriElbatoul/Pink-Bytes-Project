@@ -3,6 +3,7 @@ import 'Sign_up.dart';
 import 'login.dart';
 import 'Home_page.dart';
 import 'Med_tracker.dart';
+import 'Add_member.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,9 +17,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      initialRoute: '/MedTracker',
+      initialRoute: '/AddMember',
       debugShowCheckedModeBanner: false,
       routes: {
+        '/AddMember': (context) => AddFamilyMemberPage(),
         '/MedTracker': (context) => MedTrackerPage(),
         '/homepage': (context) => HomePage(),
         '/login': (context) => LoginScreen(),
