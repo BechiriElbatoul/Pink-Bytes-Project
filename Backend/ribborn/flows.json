@@ -1,0 +1,695 @@
+[
+    {
+        "id": "e415eada5eaf071f",
+        "type": "tab",
+        "label": "Flux 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6b9893611009e7d7",
+        "type": "MySQLdatabase",
+        "name": "pinktober",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "pinktober",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "9986887c81fe0edf",
+        "type": "http in",
+        "z": "e415eada5eaf071f",
+        "name": "",
+        "url": "login",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 70,
+        "y": 240,
+        "wires": [
+            [
+                "fb703cf38e918f41"
+            ]
+        ]
+    },
+    {
+        "id": "5979fd914fa29ba9",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "valid",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1270,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "fb703cf38e918f41",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 1",
+        "func": "msg.payload.email = msg.payload.email;\nmsg.payload.password = msg.payload.password;\n\nmsg.payload = [msg.payload.email, msg.payload.password];\nmsg.topic = \"SELECT * FROM patient u JOIN person p ON u.personID = p.personID WHERE p.email = ? AND u.password = ?;\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 240,
+        "wires": [
+            [
+                "698310fa204ac48d"
+            ]
+        ]
+    },
+    {
+        "id": "0225f1960d527203",
+        "type": "switch",
+        "z": "e415eada5eaf071f",
+        "name": "check_user",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 790,
+        "y": 240,
+        "wires": [
+            [
+                "e0c07282230f2787"
+            ],
+            [
+                "59195153ec94fb2d"
+            ]
+        ]
+    },
+    {
+        "id": "3b7a5e5d0c00a750",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 2",
+        "func": "msg.payload= msg.payload[0]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 240,
+        "wires": [
+            [
+                "0225f1960d527203"
+            ]
+        ]
+    },
+    {
+        "id": "e0c07282230f2787",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "invalid",
+        "statusCode": "404",
+        "headers": {},
+        "x": 950,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "59195153ec94fb2d",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 3",
+        "func": "msg.payload = [msg.payload.email, msg.payload.password];\n\nmsg.topic = `\n    SELECT p.personID, u.patientID, p.firstname, p.lastname, p.email, p.phone, p.address\n    FROM person p\n    JOIN patient u ON p.personID = u.personID\n    WHERE p.email = ? AND u.password = ?;\n`;\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 340,
+        "wires": [
+            [
+                "cc664ef7de057c77"
+            ]
+        ]
+    },
+    {
+        "id": "a0fc35e7e58923f4",
+        "type": "http in",
+        "z": "e415eada5eaf071f",
+        "name": "",
+        "url": "/signup",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 70,
+        "y": 600,
+        "wires": [
+            [
+                "0b689a25d6521cf7"
+            ]
+        ]
+    },
+    {
+        "id": "0b689a25d6521cf7",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "Check for Duplicate Email",
+        "func": "// Store signup data in msg properties for later use\nmsg.firstName = msg.payload.firstName;\nmsg.lastName = msg.payload.lastName;\nmsg.email = msg.payload.email;\nmsg.username = msg.payload.username;\nmsg.password = msg.payload.password;\nmsg.dob = msg.payload.dob;  // Store date of birth\n\n// Check if passwords match\nif (msg.payload.password !== msg.payload.confirmPassword) {\n    msg.payload = { error: \"Passwords do not match!\" };\n    return [null, msg];  // Send to the error path\n}\n\n// Prepare SQL query to check for duplicate email\nmsg.topic = `\n    SELECT COUNT(*) AS userCount\n    FROM person\n    WHERE email = ?;\n`;\n\n// Parameters for the SQL query\nmsg.payload = [\n    msg.email  // Email to check if it exists\n];\n\nreturn [msg, null];  // First step: Check for duplicate email\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 600,
+        "wires": [
+            [
+                "0d6d4a3090a6036f"
+            ],
+            [
+                "eddde62ba39d85ed"
+            ]
+        ]
+    },
+    {
+        "id": "9ea9c1bc0d27b3b1",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "Insert New User or Return Error",
+        "func": "if (msg.payload[0].userCount > 0) {\n    msg.payload = { error: \"Email already exists!\" };\n    return [null, msg];  // Send to the error path if email exists\n}\n\n// If no duplicate is found, proceed with inserting new user data\nmsg.topic = `\n    START TRANSACTION;\n    INSERT INTO person (firstname, lastname, email, dbb, phone, address)\n    VALUES (?, ?, ?, ?, '', '');  -- Assuming phone and address are empty for now\n    \n    -- Use LAST_INSERT_ID() directly when inserting into the patient table\n    INSERT INTO patient (username, password, personID, parentID)\n    VALUES (?, ?, LAST_INSERT_ID(), NULL);  -- Assuming no parentID for now\n    \n    COMMIT;\n`;\n\n// Use the stored msg properties for SQL query parameters\nmsg.payload = [\n    msg.firstName,  // First name\n    msg.lastName,   // Last name\n    msg.email,      // Email for the person table\n    msg.dob,        // Date of birth for the person table\n    msg.username,   // Username\n    msg.password    // Password\n];\n\nreturn [msg, null];  // Proceed to the insertion query\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 560,
+        "wires": [
+            [
+                "a7a395d480a1e004"
+            ],
+            [
+                "eddde62ba39d85ed"
+            ]
+        ]
+    },
+    {
+        "id": "eddde62ba39d85ed",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "Error Response",
+        "statusCode": "400",
+        "headers": {},
+        "x": 820,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "235b1855b1071675",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "Success Response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1210,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "7f3f53a683fc8fd5",
+        "type": "http in",
+        "z": "e415eada5eaf071f",
+        "name": "",
+        "url": "addmed",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 800,
+        "wires": [
+            [
+                "014baf48bf8565f9"
+            ]
+        ]
+    },
+    {
+        "id": "014baf48bf8565f9",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 4",
+        "func": "// Extract data from the HTTP request body (msg.payload)\nconst medName = msg.payload.medName;\nconst datetime = msg.payload.datetime;\nconst status = msg.payload.status || 'Prescribed';\nconst dossierID = msg.payload.dossierID;\nconst frequency = msg.payload.frequency || 'daily';\nconst endDate = msg.payload.end_date;\nconst scheduledTime = msg.payload.scheduledTime;\n\n// First, we need to insert into the med table\nmsg.topic = \"INSERT INTO med (datetime, medName, status, dossierID, frequency, end_date) VALUES (?, ?, ?, ?, ?, ?)\";\nmsg.payload = [datetime, medName, status, dossierID, frequency, endDate];\n\n// We'll pass along the scheduledTime and medName for the next step\nmsg.scheduledTime = scheduledTime;\nmsg.medName = medName;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 800,
+        "wires": [
+            [
+                "c6306a568dbd042c"
+            ]
+        ]
+    },
+    {
+        "id": "fb81597b6e7bbf97",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "Success Response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1210,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "0be9f48c46e7fdde",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 5",
+        "func": "// Prepare the SQL query for the notifications table\nmsg.topic = \"INSERT INTO notifications (content, sent, medID, scheduledTime) VALUES (?, 0, LAST_INSERT_ID(), ?)\";\n\n// Prepare the content of the notification and use the previously stored scheduledTime\nconst content = `Reminder: Take your medication ${msg.medName}`;\n\nmsg.payload = [content, msg.scheduledTime];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 800,
+        "wires": [
+            [
+                "b58dda26c86a637a"
+            ]
+        ]
+    },
+    {
+        "id": "1dbae48e19b08dde",
+        "type": "http in",
+        "z": "e415eada5eaf071f",
+        "name": "",
+        "url": "addexam",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 880,
+        "wires": [
+            [
+                "9f9abe6c4bee5bc4"
+            ]
+        ]
+    },
+    {
+        "id": "9f9abe6c4bee5bc4",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 6",
+        "func": "// Extract data from the HTTP request body (msg.payload)\nconst datetime = msg.payload.datetime;\nconst description = msg.payload.description || null;\nconst status = msg.payload.status || 'Scheduled';\nconst feedback = msg.payload.feedback || null;\nconst dossierID = msg.payload.dossierID;\nconst location = msg.payload.location || null;\n\n// First, we need to insert into the exam table\nmsg.topic = \"INSERT INTO exam (datetime, description, status, feedback, dossierID, location) VALUES (?, ?, ?, ?, ?, ?)\";\nmsg.payload = [datetime, description, status, feedback, dossierID, location];\n\n// Store the exam datetime for the notification and pass along necessary information for the next step\nmsg.scheduledTime = datetime;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 880,
+        "wires": [
+            [
+                "68c241157adbec75"
+            ]
+        ]
+    },
+    {
+        "id": "8cb8c48b4d36b423",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "Success Response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1210,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "70db8bcf70b88f9e",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 7",
+        "func": "// Prepare the SQL query for inserting into the notifications table\nmsg.topic = \"INSERT INTO notifications (content, sent, examID, scheduledTime) VALUES (?, 0, LAST_INSERT_ID(), ?)\";\n\n// Prepare the content of the notification and use the previously stored scheduledTime\nconst content = `Reminder: Upcoming exam on ${msg.examDatetime}`;\n\n// Prepare the payload for the notification\nmsg.payload = [content, msg.scheduledTime];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 880,
+        "wires": [
+            [
+                "f63d15b252970fdb"
+            ]
+        ]
+    },
+    {
+        "id": "2bb14d0cfc59f3f1",
+        "type": "http in",
+        "z": "e415eada5eaf071f",
+        "name": "",
+        "url": "/addparent",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 980,
+        "wires": [
+            [
+                "569d65e7a448ca69"
+            ]
+        ]
+    },
+    {
+        "id": "569d65e7a448ca69",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 8",
+        "func": "// Extract the parentID and patientID from the request payload\nconst parentID = msg.payload.parentID;  // parentID (e.g., 1)\nconst patientID = msg.payload.patientID;  // patientID (e.g., 6)\n\n// Prepare the SQL query to link the parentID with the current patient's record\nmsg.topic = \"UPDATE patient SET parentID = ? WHERE patientID = ?\";\nmsg.payload = [parentID, patientID];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 980,
+        "wires": [
+            [
+                "2e2ee8c3558e3137"
+            ]
+        ]
+    },
+    {
+        "id": "6722959fd4d06fad",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "Success Response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 790,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "3d2916069f933fa5",
+        "type": "http in",
+        "z": "e415eada5eaf071f",
+        "name": "",
+        "url": "get-patient-info",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 1060,
+        "wires": [
+            [
+                "6180df2aa15eada9"
+            ]
+        ]
+    },
+    {
+        "id": "6180df2aa15eada9",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 9",
+        "func": "const patientID = msg.req.query.patientID;\n\nif (!patientID) {\n    // If patientID is not provided, return an error\n    msg.payload = {\n        success: false,\n        message: \"patientID is required.\"\n    };\n    return [null, msg];  // Send error to the HTTP response node\n}\n\n// Prepare SQL query to fetch data from both patient and person tables using a JOIN\nmsg.topic = `\n    SELECT \n        p.patientID, p.username, p.password, p.parentID,\n        per.firstname, per.lastname, per.dbb, per.email, per.phone, per.address\n    FROM \n        patient p\n    JOIN \n        person per ON p.personID = per.personID\n    WHERE \n        p.patientID = ?\n`;\n\nmsg.payload = [patientID];  // Pass the patientID as payload\n\nreturn [msg, null];  // Proceed to MySQL node\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 1060,
+        "wires": [
+            [
+                "55c6a15aa5327af2"
+            ]
+        ]
+    },
+    {
+        "id": "e1ed14e0244ffecc",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "Success Response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 770,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "9a140bfa5a3a0121",
+        "type": "http in",
+        "z": "e415eada5eaf071f",
+        "name": "",
+        "url": "update-patient-info",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 1140,
+        "wires": [
+            [
+                "52bdef4d30ebb83f"
+            ]
+        ]
+    },
+    {
+        "id": "52bdef4d30ebb83f",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 10",
+        "func": "// Extract data for patient table\nconst patientID = msg.payload.patientID;\nconst username = msg.payload.username || null;\nconst password = msg.payload.password || null;\n\n// Initialize query components\nlet patientFields = [];\nlet patientValues = [];\n\n// Build dynamic query for patient table\nif (username) {\n    patientFields.push(\"username = ?\");\n    patientValues.push(username);\n}\nif (password) {\n    patientFields.push(\"password = ?\");\n    patientValues.push(password);\n}\n\n// If no fields provided, return an error\nif (patientFields.length === 0) {\n    msg.payload = {\n        success: false,\n        message: \"No fields provided for patient update.\"\n    };\n    return [null, msg];\n}\n\n// Prepare SQL query for patient table\nmsg.topic = `UPDATE patient SET ${patientFields.join(\", \")} WHERE patientID = ?`;\npatientValues.push(patientID);  // Add patientID at the end\nmsg.payload = patientValues;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 1140,
+        "wires": [
+            [
+                "16443b266ca3b698"
+            ]
+        ]
+    },
+    {
+        "id": "09fbc59b8cb57134",
+        "type": "http response",
+        "z": "e415eada5eaf071f",
+        "name": "Success Response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1210,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "073b45105401fa07",
+        "type": "function",
+        "z": "e415eada5eaf071f",
+        "name": "function 11",
+        "func": "// Extract data for person table\nconst patientID = msg.payload.patientID;\nconst firstname = msg.payload.firstname || null;\nconst lastname = msg.payload.lastname || null;\nconst email = msg.payload.email || null;\nconst phone = msg.payload.phone || null;\nconst address = msg.payload.address || null;\n\n// Initialize query components\nlet personFields = [];\nlet personValues = [];\n\n// Build dynamic query for person table\nif (firstname) {\n    personFields.push(\"firstname = ?\");\n    personValues.push(firstname);\n}\nif (lastname) {\n    personFields.push(\"lastname = ?\");\n    personValues.push(lastname);\n}\nif (email) {\n    personFields.push(\"email = ?\");\n    personValues.push(email);\n}\nif (phone) {\n    personFields.push(\"phone = ?\");\n    personValues.push(phone);\n}\nif (address) {\n    personFields.push(\"address = ?\");\n    personValues.push(address);\n}\n\n// If no fields provided, return an error\nif (personFields.length === 0) {\n    msg.payload = {\n        success: false,\n        message: \"No fields provided for person update.\"\n    };\n    return [null, msg];\n}\n\n// Prepare SQL query for person table using subquery to get personID\nmsg.topic = `UPDATE person SET ${personFields.join(\", \")} WHERE personID = (SELECT personID FROM patient WHERE patientID = ?)`;\npersonValues.push(patientID);  // Add patientID for the subquery\nmsg.payload = personValues;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 1140,
+        "wires": [
+            [
+                "a738e21c78f9cbb0"
+            ]
+        ]
+    },
+    {
+        "id": "698310fa204ac48d",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "",
+        "x": 460,
+        "y": 240,
+        "wires": [
+            [
+                "3b7a5e5d0c00a750"
+            ]
+        ]
+    },
+    {
+        "id": "cc664ef7de057c77",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "",
+        "x": 1120,
+        "y": 340,
+        "wires": [
+            [
+                "5979fd914fa29ba9"
+            ]
+        ]
+    },
+    {
+        "id": "0d6d4a3090a6036f",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 560,
+        "y": 560,
+        "wires": [
+            [
+                "9ea9c1bc0d27b3b1"
+            ]
+        ]
+    },
+    {
+        "id": "a7a395d480a1e004",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 1180,
+        "y": 560,
+        "wires": [
+            [
+                "235b1855b1071675"
+            ]
+        ]
+    },
+    {
+        "id": "c6306a568dbd042c",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 520,
+        "y": 800,
+        "wires": [
+            [
+                "fb81597b6e7bbf97"
+            ]
+        ]
+    },
+    {
+        "id": "b58dda26c86a637a",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 920,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68c241157adbec75",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 520,
+        "y": 880,
+        "wires": [
+            [
+                "8cb8c48b4d36b423"
+            ]
+        ]
+    },
+    {
+        "id": "f63d15b252970fdb",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 920,
+        "y": 880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2e2ee8c3558e3137",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 520,
+        "y": 980,
+        "wires": [
+            [
+                "6722959fd4d06fad"
+            ]
+        ]
+    },
+    {
+        "id": "55c6a15aa5327af2",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 520,
+        "y": 1060,
+        "wires": [
+            [
+                "e1ed14e0244ffecc"
+            ]
+        ]
+    },
+    {
+        "id": "16443b266ca3b698",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 560,
+        "y": 1140,
+        "wires": [
+            [
+                "09fbc59b8cb57134"
+            ]
+        ]
+    },
+    {
+        "id": "a738e21c78f9cbb0",
+        "type": "mysql",
+        "z": "e415eada5eaf071f",
+        "mydb": "6b9893611009e7d7",
+        "name": "pinktober",
+        "x": 960,
+        "y": 1140,
+        "wires": [
+            []
+        ]
+    }
+]
