@@ -7,6 +7,7 @@ import 'Family_history.dart';
 import 'scanner.dart';
 import 'scan.dart';
 import 'homescreen.dart';
+import 'settings.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,9 +21,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      initialRoute: '/screen',
+      initialRoute: '/settings',
       debugShowCheckedModeBanner: false,
       routes: {
+        '/settings': (context) => SettingsPage(),
         '/screen': (context) => HomeScreenPage(),
         '/scan': (context) => ScanIngredientsPage(),
         '/scanner': (context) => ScanCosmeticsPage(),
