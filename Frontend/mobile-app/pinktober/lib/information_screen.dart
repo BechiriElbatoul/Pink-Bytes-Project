@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pinktober/Home_page.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key});
@@ -161,7 +162,12 @@ class _InformationScreenState extends State<InformationScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 12),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        },
                         child: const Text(
                           'Finalize',
                           style: TextStyle(

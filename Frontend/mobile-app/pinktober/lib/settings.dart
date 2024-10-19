@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'Family_history.dart';
+import 'scanner.dart';
+import 'notif.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -65,7 +69,7 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -113,7 +117,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -138,9 +142,33 @@ class SettingsPage extends StatelessWidget {
         ),
       ],
       currentIndex: 0,
-      onTap: (index) {},
+      onTap: (index) {
+        if (index == 2) {
+          // Navigate to ScanCosmeticsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScanCosmeticsPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // Navigate to FamilyHistoryPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FamilyHistoryPage(),
+            ),
+          );
+        } else if (index == 4) {
+          // Navigate to SettingsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(),
+            ),
+          );
+        }
+        // Handle other navigation items if needed
+      },
       backgroundColor: Colors.white,
-      selectedItemColor: const Color.fromARGB(255, 146, 98, 114),
+      selectedItemColor: Colors.pink,
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 0,
@@ -153,7 +181,18 @@ class SettingsPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          // Check if the button is for Notifications
+          if (title == 'Notifications') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    NotificationPage(), // Navigate to NotificationPage
+              ),
+            );
+          }
+          // Add logic for other buttons if needed
+        },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(

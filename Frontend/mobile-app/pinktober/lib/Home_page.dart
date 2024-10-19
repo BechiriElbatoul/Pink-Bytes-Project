@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'scanner.dart';
+import 'Family_history.dart';
+import 'settings.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -86,7 +89,8 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar:
+          _buildBottomNavigationBar(context), // Pass context here
     );
   }
 
@@ -138,7 +142,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -163,7 +167,31 @@ class HomePage extends StatelessWidget {
         ),
       ],
       currentIndex: 0,
-      onTap: (index) {},
+      onTap: (index) {
+        if (index == 2) {
+          // Navigate to ScanCosmeticsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScanCosmeticsPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // Navigate to FamilyHistoryPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FamilyHistoryPage(),
+            ),
+          );
+        } else if (index == 4) {
+          // Navigate to SettingsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(),
+            ),
+          );
+        }
+        // Handle other navigation items if needed
+      },
       backgroundColor: Colors.white,
       selectedItemColor: Colors.pink,
       unselectedItemColor: Colors.grey,

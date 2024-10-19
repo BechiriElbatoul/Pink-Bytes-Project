@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'Family_history.dart';
+import 'scanner.dart';
 
 class ScanIngredientsPage extends StatelessWidget {
   const ScanIngredientsPage({super.key});
@@ -34,10 +38,9 @@ class ScanIngredientsPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(30.0),
           child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.start, 
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 0), 
+              const SizedBox(height: 0),
               const Text(
                 'Scan Your Cosmetics for Harmful Ingredients',
                 style: TextStyle(
@@ -46,16 +49,16 @@ class ScanIngredientsPage extends StatelessWidget {
                   fontFamily: 'Quicksand',
                 ),
               ),
-              const SizedBox(height: 90), 
+              const SizedBox(height: 90),
               Container(
                 width: double.infinity,
-                height: 150, 
+                height: 150,
                 decoration: BoxDecoration(
                   color: const Color(0xFFE17489),
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 50), 
+              const SizedBox(height: 50),
               const Text(
                 'Couldn\'t find?',
                 style: TextStyle(
@@ -72,26 +75,21 @@ class ScanIngredientsPage extends StatelessWidget {
                   fontFamily: 'Quicksand',
                 ),
               ),
-              const SizedBox(height: 50), 
-             
+              const SizedBox(height: 50),
               SizedBox(
-                width: 200, 
+                width: 200,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(
-                        255, 214, 163, 180), 
+                    backgroundColor: const Color.fromARGB(255, 214, 163, 180),
                     side: const BorderSide(
-                        color:
-                            Color.fromARGB(255, 216, 167, 183)), 
+                        color: Color.fromARGB(255, 216, 167, 183)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     padding: const EdgeInsets.symmetric(
                         vertical: 16.0, horizontal: 32.0),
                   ),
-                  onPressed: () {
-                    
-                  },
+                  onPressed: () {},
                   child: const Text(
                     'Scan',
                     style: TextStyle(
@@ -107,7 +105,7 @@ class ScanIngredientsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -155,7 +153,7 @@ class ScanIngredientsPage extends StatelessWidget {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -180,9 +178,33 @@ class ScanIngredientsPage extends StatelessWidget {
         ),
       ],
       currentIndex: 0,
-      onTap: (index) {},
+      onTap: (index) {
+        if (index == 2) {
+          // Navigate to ScanCosmeticsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScanCosmeticsPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // Navigate to FamilyHistoryPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FamilyHistoryPage(),
+            ),
+          );
+        } else if (index == 4) {
+          // Navigate to SettingsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(),
+            ),
+          );
+        }
+        // Handle other navigation items if needed
+      },
       backgroundColor: Colors.white,
-      selectedItemColor: const Color.fromARGB(255, 219, 134, 163),
+      selectedItemColor: Colors.pink,
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 0,

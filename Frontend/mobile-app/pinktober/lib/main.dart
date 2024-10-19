@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'check.dart';
+import 'homescreen.dart';
+import 'Sign_up.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/check', // Ensure this matches the route defined below
       debugShowCheckedModeBanner: false,
       routes: {
-        '/check': (context) => CheckPage(), // Keep this as is
+        '/check': (context) => HomeScreenPage(),
+        '/signup': (context) => SignUpScreen(), // Keep this as is
       },
     );
   }

@@ -1,18 +1,88 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
+import 'package:http/http.dart' as http; // Import the http package
+import 'dart:convert'; // For JSON encoding/decoding
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  
+  // Method to handle login
+  Future<void> _login() async {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    // Create the API URL
+    final Uri apiUrl = Uri.parse('http://login/login'); // Replace with your Node-RED URL
+
+    try {
+      // Make a POST request
+      final response = await http.post(
+        apiUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      // Check the response status
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        // Handle successful login, e.g., navigate to the home page
+        if (responseBody['success']) {
+          // Navigate to the home page
+          Navigator.pushReplacementNamed(context, '/home'); // Adjust route as necessary
+        } else {
+          // Handle login failure
+          _showErrorDialog(responseBody['message']);
+        }
+      } else {
+        // Handle server error
+        _showErrorDialog('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions (network issues, etc.)
+      _showErrorDialog('An error occurred: $e');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        // Add SingleChildScrollView here
         padding: const EdgeInsets.symmetric(
-            horizontal: 32.0, vertical: 16.0), // Increased horizontal padding
+            horizontal: 32.0, vertical: 16.0), 
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center, // Center the main text
+          crossAxisAlignment: CrossAxisAlignment.center, 
           children: [
             const SizedBox(height: 80),
             const Text(
@@ -27,12 +97,12 @@ class LoginScreen extends StatelessWidget {
 
             // Left aligned Email Label and TextField
             _buildLabel('Email'),
-            _buildTextField('Email'),
+            _buildTextField('Email', _emailController),
             const SizedBox(height: 24),
 
             // Left aligned Password Label and TextField
             _buildLabel('Password'),
-            _buildTextField('Password', isPassword: true),
+            _buildTextField('Password', _passwordController, isPassword: true),
             const SizedBox(height: 16),
 
             Center(
@@ -63,9 +133,7 @@ class LoginScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 ),
-                onPressed: () {
-                  // Login logic
-                },
+                onPressed: _login, // Call the login method
                 child: const Text(
                   'LOGIN',
                   style: TextStyle(
@@ -106,12 +174,11 @@ class LoginScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6.0),
       child: Align(
-        // Aligning the label to the left
         alignment: Alignment.centerLeft,
         child: Text(
           label,
           style: const TextStyle(
-            fontSize: 14, // Updated to 14px
+            fontSize: 14,
             color: Colors.black87,
             fontFamily: 'Quicksand',
           ),
@@ -120,8 +187,9 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String label, {bool isPassword = false}) {
+  Widget _buildTextField(String label, TextEditingController controller, {bool isPassword = false}) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -140,11 +208,11 @@ class LoginScreen extends StatelessWidget {
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
             vertical: 10,
-            horizontal: 10), // Adjust padding to make the rectangles smaller
+            horizontal: 10),
       ),
       style: const TextStyle(
         fontFamily: 'Quicksand',
-        fontSize: 14, // Updated to 14px
+        fontSize: 14,
       ),
     );
   }

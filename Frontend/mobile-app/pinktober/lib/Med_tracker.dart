@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'Family_history.dart';
+import 'scanner.dart';
 
 class MedTrackerPage extends StatefulWidget {
   const MedTrackerPage({super.key});
@@ -98,7 +102,7 @@ class _MedTrackerPageState extends State<MedTrackerPage> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -201,7 +205,7 @@ class _MedTrackerPageState extends State<MedTrackerPage> {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -226,9 +230,33 @@ class _MedTrackerPageState extends State<MedTrackerPage> {
         ),
       ],
       currentIndex: 0,
-      onTap: (index) {},
+      onTap: (index) {
+        if (index == 2) {
+          // Navigate to ScanCosmeticsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScanCosmeticsPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // Navigate to FamilyHistoryPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FamilyHistoryPage(),
+            ),
+          );
+        } else if (index == 4) {
+          // Navigate to SettingsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(),
+            ),
+          );
+        }
+        // Handle other navigation items if needed
+      },
       backgroundColor: Colors.white,
-      selectedItemColor: const Color.fromARGB(255, 251, 251, 251),
+      selectedItemColor: Colors.pink,
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 0,

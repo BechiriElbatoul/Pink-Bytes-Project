@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'Family_history.dart';
+import 'scanner.dart';
+import 'Add_member.dart'; // Import the AddFamilyMemberPage
 
 class FamilyHistoryPage extends StatelessWidget {
   const FamilyHistoryPage({super.key});
@@ -32,8 +37,7 @@ class FamilyHistoryPage extends StatelessWidget {
       drawer: _buildSideBar(context),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(
-              16.0), 
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,20 +61,17 @@ class FamilyHistoryPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-
               Row(
                 children: [
                   Expanded(
-                    child: _buildRectangleButton(
-                        context), 
+                    child: _buildRectangleButton(context),
                   ),
-                  const SizedBox(
-                      width: 8),
+                  const SizedBox(width: 8),
                   Flexible(
                     child: Image.asset(
                       'assets/images/ppl.png', // Replace with your actual image
-                      height: 200, 
-                      fit: BoxFit.cover, 
+                      height: 200,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ],
@@ -107,7 +108,7 @@ class FamilyHistoryPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -159,7 +160,7 @@ class FamilyHistoryPage extends StatelessWidget {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -184,7 +185,31 @@ class FamilyHistoryPage extends StatelessWidget {
         ),
       ],
       currentIndex: 0,
-      onTap: (index) {},
+      onTap: (index) {
+        if (index == 2) {
+          // Navigate to ScanCosmeticsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScanCosmeticsPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // Navigate to FamilyHistoryPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FamilyHistoryPage(),
+            ),
+          );
+        } else if (index == 4) {
+          // Navigate to SettingsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(),
+            ),
+          );
+        }
+        // Handle other navigation items if needed
+      },
       backgroundColor: Colors.white,
       selectedItemColor: Colors.pink,
       unselectedItemColor: Colors.grey,
@@ -197,7 +222,12 @@ class FamilyHistoryPage extends StatelessWidget {
   Widget _buildRectangleButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Handle button tap
+        // Navigate to AddFamilyMemberPage
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => AddFamilyMemberPage(),
+          ),
+        );
       },
       child: Container(
         height: 50,
@@ -307,9 +337,9 @@ class FamilyHistoryPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Image.asset('assets/images/iconic.png', width: 100), 
-        Image.asset('assets/images/iconic.png', width: 100),
-        Image.asset('assets/images/iconic.png', width: 100), 
+        Image.asset('assets/images/iconic.png', height: 80),
+        Image.asset('assets/images/iconic.png', height: 80),
+        Image.asset('assets/images/iconic.png', height: 80),
       ],
     );
   }

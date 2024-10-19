@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'Family_history.dart';
+import 'scanner.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -56,8 +60,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 title: 'Pause all',
                 trailingWidget: Switch(
                   value: isPaused,
-                  activeColor:
-                      Color(0xFFFFCDD9), 
+                  activeColor: Color(0xFFFFCDD9),
                   onChanged: (bool value) {
                     setState(() {
                       isPaused = value;
@@ -95,7 +98,7 @@ class _NotificationPageState extends State<NotificationPage> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -152,7 +155,7 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -177,9 +180,33 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
       ],
       currentIndex: 0,
-      onTap: (index) {},
+      onTap: (index) {
+        if (index == 2) {
+          // Navigate to ScanCosmeticsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScanCosmeticsPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // Navigate to FamilyHistoryPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FamilyHistoryPage(),
+            ),
+          );
+        } else if (index == 4) {
+          // Navigate to SettingsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(),
+            ),
+          );
+        }
+        // Handle other navigation items if needed
+      },
       backgroundColor: Colors.white,
-      selectedItemColor: const Color.fromARGB(255, 146, 98, 114),
+      selectedItemColor: Colors.pink,
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 0,

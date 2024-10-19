@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'Family_history.dart';
+import 'scanner.dart';
+import 'scan.dart';
 
 class ScanCosmeticsPage extends StatelessWidget {
   const ScanCosmeticsPage({super.key});
@@ -56,7 +61,12 @@ class ScanCosmeticsPage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    // Handle button tap
+                    // Navigate to ScanIngredientsPage
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ScanIngredientsPage(),
+                      ),
+                    );
                   },
                   child: const Text(
                     'SCAN HERE',
@@ -103,7 +113,7 @@ class ScanCosmeticsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -151,7 +161,7 @@ class ScanCosmeticsPage extends StatelessWidget {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -176,9 +186,33 @@ class ScanCosmeticsPage extends StatelessWidget {
         ),
       ],
       currentIndex: 0,
-      onTap: (index) {},
+      onTap: (index) {
+        if (index == 2) {
+          // Navigate to ScanCosmeticsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScanCosmeticsPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // Navigate to FamilyHistoryPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FamilyHistoryPage(),
+            ),
+          );
+        } else if (index == 4) {
+          // Navigate to SettingsPage
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(),
+            ),
+          );
+        }
+        // Handle other navigation items if needed
+      },
       backgroundColor: Colors.white,
-      selectedItemColor: const Color.fromARGB(255, 146, 98, 114),
+      selectedItemColor: Colors.pink,
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 0,
